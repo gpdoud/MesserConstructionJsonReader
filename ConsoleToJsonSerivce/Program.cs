@@ -11,6 +11,15 @@ namespace ConsoleToJsonSerivce {
 
 	class Program {
 
+		void ListProjects() {
+			var lctrl = new LatistaController();
+			var projects = lctrl.ListProjects();
+			System.Diagnostics.Debug.WriteLine($"offset:{projects.offset}, limit:{projects.limit}, total:{projects.total}");
+			foreach(var p in projects.projects) {
+				System.Diagnostics.Debug.WriteLine($"id:{p.project_id}, name:{p.name}");
+			}
+		}
+
 		void List() {
 			var UserCtrl = new UsersController();
 			var users = UserCtrl.List();
@@ -26,8 +35,9 @@ namespace ConsoleToJsonSerivce {
 		}
 
 		void Run() {
+			ListProjects();
 			//List();
-			Get(2);
+			//Get(2);
 		}
 
 		static void Main(string[] args) {
