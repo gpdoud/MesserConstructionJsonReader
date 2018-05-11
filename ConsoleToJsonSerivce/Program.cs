@@ -11,12 +11,25 @@ namespace ConsoleToJsonSerivce {
 
 	class Program {
 
+		void ListContacts() {
+			var lctrl = new LatistaController();
+			var contacts = lctrl.ListContacts();
+			//Display($"offset:{contacts.offset}, limit:{contacts.limit}, total:{contacts.total}");
+			//foreach (var c in contacts.contacts) {
+			//	Display($"id:{c.user_id}, firstname:{c.first_name}, lastname:{c.last_name}, company name: {c.company_name}");
+			//}
+			SqlLoader sql = new SqlLoader();
+			foreach( var contact in contacts.contacts) {
+				var success = sql.LoadContact(contact);
+			}
+		}
+
 		void ListProjects() {
 			var lctrl = new LatistaController();
 			var projects = lctrl.ListProjects();
-			System.Diagnostics.Debug.WriteLine($"offset:{projects.offset}, limit:{projects.limit}, total:{projects.total}");
+			Display($"offset:{projects.offset}, limit:{projects.limit}, total:{projects.total}");
 			foreach(var p in projects.projects) {
-				System.Diagnostics.Debug.WriteLine($"id:{p.project_id}, name:{p.name}");
+				Display($"id:{p.project_id}, name:{p.name}, job number:{p.job_number}");
 			}
 		}
 
@@ -24,18 +37,24 @@ namespace ConsoleToJsonSerivce {
 			var UserCtrl = new UsersController();
 			var users = UserCtrl.List();
 			foreach (var user in users) {
-				Console.WriteLine($"{user.FirstName} {user.LastName}");
+				Display($"{user.FirstName} {user.LastName}");
 			}
 		}
 
 		void Get(int ID) {
 			var UserCtrl = new UsersController();
 			var user = UserCtrl.Get(ID);
-			Console.WriteLine($"{user.FirstName} {user.LastName}");
+			Display($"{user.FirstName} {user.LastName}");
+		}
+
+		void Display(string message) {
+			System.Diagnostics.Debug.WriteLine(message);
+			Console.WriteLine(message);
 		}
 
 		void Run() {
-			ListProjects();
+			ListContacts();
+			//ListProjects();
 			//List();
 			//Get(2);
 		}

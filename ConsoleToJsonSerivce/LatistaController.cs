@@ -18,6 +18,24 @@ namespace ConsoleToJsonSerivce {
 		private static string password = "Sl@pshot212";
 		private string encoded = System.Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(username + ":" + password));
 
+		public Contacts ListContacts() {
+			var request = GetRequest("contacts");
+			request.Headers.Add("Authorization", "Basic " + encoded);
+			try {
+				var response = request.GetResponse();
+				var responseStream = response.GetResponseStream();
+				var reader = new StreamReader(responseStream, System.Text.Encoding.UTF8);
+				var json = reader.ReadToEnd();
+				serializer.MaxJsonLength = json.Length + 100;
+				var contacts = serializer.Deserialize<Contacts>(json);
+				responseStream.Dispose();
+				return contacts;
+			} catch (WebException ex) {
+				WebExceptionHandler(ex);
+				throw ex;
+			}
+		}
+
 		public Projects ListProjects() {
 			var request = GetRequest("projects");
 			request.Headers.Add("Authorization", "Basic " + encoded);
